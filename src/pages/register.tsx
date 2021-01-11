@@ -1,17 +1,19 @@
 import Head from "next/head";
-import styles from "../assets/styles/scss/Home.module.scss";
 
 export default function Register() {
   return (
-    <div className={styles.container}>
+    <div className="flex">
       <Head>
-        <title>Create Next App</title>
+        <title>Register</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>Register</h1>
-      </main>
+      <div
+        className="w-40 h-screen bg-center bg-cover"
+        style={{
+          backgroundImage: "url('/images/bricks.jpg')",
+        }}
+      ></div>
     </div>
   );
 }
