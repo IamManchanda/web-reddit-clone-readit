@@ -1,6 +1,7 @@
 {
   "name": "web-reddit-clone-readit",
   "version": "0.1.0",
+  "description": "Web: Reddit Clone - Readit App",
   "private": true,
   "scripts": {
     "dev": "next dev",
