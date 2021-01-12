@@ -5,7 +5,7 @@ import axios from "axios";
 import InputGroup from "../components/input-group";
 import { useRouter } from "next/router";
 
-export default function Register() {
+function PageRegister() {
   const router = useRouter();
 
   const [agreement, setAgreement] = useState(false);
@@ -29,7 +29,6 @@ export default function Register() {
       await axios.post("/auth/register", { email, username, password });
       router.push("/login");
     } catch (error) {
-      console.log(error);
       setErrors(error.response.data);
     }
   };
@@ -109,3 +108,5 @@ export default function Register() {
     </Fragment>
   );
 }
+
+export default PageRegister;
