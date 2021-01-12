@@ -38,7 +38,6 @@ export default function Register() {
     <Fragment>
       <Head>
         <title>Register</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <div className="flex">
