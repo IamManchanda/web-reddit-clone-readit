@@ -26,15 +26,18 @@ export default function Home() {
           <i className="pl-4 pr-3 text-gray-500 fas fa-search"></i>
           <input
             type="text"
+            placeholder="Search..."
             className="py-1 pr-3 bg-transparent rounded w-160 focus:outline-none"
           />
         </div>
         <div className="flex">
           <Link href="/login">
-            <a className="w-32 py-1 mr-4 button blue hollow">Log In</a>
+            <a className="w-32 py-1 mr-4 leading-5 button blue hollow">
+              Log In
+            </a>
           </Link>
           <Link href="/register">
-            <a className="w-32 py-1 button blue">Sign Up</a>
+            <a className="w-32 py-1 leading-5 button blue">Sign Up</a>
           </Link>
         </div>
       </div>

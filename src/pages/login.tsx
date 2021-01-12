@@ -30,7 +30,7 @@ export default function Login() {
         <title>Log In</title>
       </Head>
 
-      <div className="flex">
+      <div className="flex bg-white">
         <div
           className="h-screen bg-center bg-cover w-36"
           style={{

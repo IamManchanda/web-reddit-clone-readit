@@ -40,7 +40,7 @@ export default function Register() {
         <title>Register</title>
       </Head>
 
-      <div className="flex">
+      <div className="flex bg-white">
         <div
           className="h-screen bg-center bg-cover w-36"
           style={{
