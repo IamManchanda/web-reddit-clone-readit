@@ -16,16 +16,7 @@ export default function Login() {
     event.preventDefault();
 
     try {
-      await axios.post(
-        "/auth/login",
-        {
-          username,
-          password,
-        },
-        {
-          withCredentials: true,
-        },
-      );
+      await axios.post("/auth/login", { username, password });
       router.push("/");
     } catch (error) {
       console.log(error);
