@@ -1,6 +1,6 @@
 import { AppProps } from "next/app";
 import axios from "axios";
-import "../assets/styles/scss/globals.scss";
+import "../assets/styles/scss/tailwind.scss";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 axios.defaults.withCredentials = true;
