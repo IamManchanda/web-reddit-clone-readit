@@ -33,7 +33,7 @@ function PageIndex() {
             {posts.map((post) => (
               <div key={post.identifier} className="flex mb-4 bg-white rounded">
                 <div className="w-10 text-center bg-gray-200 rounded-l">
-                  <p>V</p>
+                  <p>&nbsp;</p>
                 </div>
                 <div className="w-full p-2">
                   <div className="flex items-center">
@@ -51,19 +51,23 @@ function PageIndex() {
                     <p className="text-xs text-gray-500">
                       <span className="mx-1">•</span>
                       Posted by
-                      <Link href={`/u/user`}>
-                        <a className="mx-1 hover:underline">/u/user</a>
+                      <Link href={`/u/${post.username}`}>
+                        <a className="mx-1 hover:underline">
+                          /u/{post.username}
+                        </a>
                       </Link>
                       <span>•</span>
-                      <Link
-                        href={`/r/${post.subName}/${post.identifier}/${post.slug}`}
-                      >
+                      <Link href={post.url}>
                         <a className="mx-1 hover:underline">
                           {dayjs(post.createdAt).fromNow()}
                         </a>
                       </Link>
                     </p>
                   </div>
+                  <Link href={post.url}>
+                    <a className="my-1 text-lg font-medium">{post.title}</a>
+                  </Link>
+                  {post.body && <p className="my-1 text-sm">{post.body}</p>}
                 </div>
               </div>
             ))}
