@@ -15,10 +15,16 @@ const ActionButton = ({ children }) => (
   </button>
 );
 
-const PostCard: React.FC<PostCardProps> = ({ post }) => (
+const PostCard: React.FC<PostCardProps> = ({ post }: PostCardProps) => (
   <div key={post.identifier} className="flex mb-4 bg-white rounded">
-    <div className="w-10 text-center bg-gray-200 rounded-l">
-      <p>&nbsp;</p>
+    <div className="w-10 py-3 text-center bg-gray-200 rounded-l">
+      <div className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500">
+        <i className="icon-arrow-up"></i>
+      </div>
+      <p className="text-xs font-bold">{post.voteScore}</p>
+      <div className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-600">
+        <i className="icon-arrow-down"></i>
+      </div>
     </div>
     <div className="w-full p-2">
       <div className="flex items-center">
@@ -56,7 +62,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => (
           <a>
             <ActionButton>
               <i className="mr-1 fas fa-comment-alt fa-xs" />
-              <span className="font-bold">20 Comments</span>
+              <span className="font-bold">{post.commentCount} Comments</span>
             </ActionButton>
           </a>
         </Link>
