@@ -9,6 +9,12 @@ interface PostCardProps {
   post: Post;
 }
 
+const ActionButton = ({ children }) => (
+  <button className="px-1 py-1 mr-1 text-xs text-gray-400 rounded cursor-pointer hover:bg-gray-200">
+    {children}
+  </button>
+);
+
 const PostCard: React.FC<PostCardProps> = ({ post }) => (
   <div key={post.identifier} className="flex mb-4 bg-white rounded">
     <div className="w-10 text-center bg-gray-200 rounded-l">
@@ -48,20 +54,20 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => (
       <div className="flex">
         <Link href={post.url}>
           <a>
-            <div className="px-1 py-1 mr-1 text-xs text-gray-400 rounded cursor-pointer hover:bg-gray-200">
+            <ActionButton>
               <i className="mr-1 fas fa-comment-alt fa-xs" />
               <span className="font-bold">20 Comments</span>
-            </div>
+            </ActionButton>
           </a>
         </Link>
-        <div className="px-1 py-1 mr-1 text-xs text-gray-400 rounded cursor-pointer hover:bg-gray-200">
+        <ActionButton>
           <i className="mr-1 fas fa-share fa-xs" />
           <span className="font-bold">Share</span>
-        </div>
-        <div className="px-1 py-1 mr-1 text-xs text-gray-400 rounded cursor-pointer hover:bg-gray-200">
+        </ActionButton>
+        <ActionButton>
           <i className="mr-1 fas fa-bookmark fa-xs" />
           <span className="font-bold">Save</span>
-        </div>
+        </ActionButton>
       </div>
     </div>
   </div>
