@@ -13,7 +13,7 @@ function PageIndex() {
         const res = await axios.get("/posts");
         setPosts(res.data);
       } catch (error) {
-        console.log(error);
+        console.log({ error });
       }
     })();
   }, []);
