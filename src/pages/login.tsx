@@ -4,6 +4,7 @@ import Link from "next/link";
 import axios from "axios";
 import InputGroup from "../components/input-group";
 import { useRouter } from "next/router";
+import { useAuthDispatch, useAuthState } from "../context/auth";
 
 function PageLogin() {
   const router = useRouter();
@@ -12,11 +13,19 @@ function PageLogin() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<any>({});
 
+  const dispatch = useAuthDispatch();
+  const { authenticated } = useAuthState();
+
+  if (authenticated) {
+    router.push("/");
+  }
+
   const handleFormSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
     try {
-      await axios.post("/auth/login", { username, password });
+      const res = await axios.post("/auth/login", { username, password });
+      dispatch("LOGIN", res.data);
       router.push("/");
     } catch (error) {
       setErrors(error.response.data);

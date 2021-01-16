@@ -4,6 +4,7 @@ import Link from "next/link";
 import axios from "axios";
 import InputGroup from "../components/input-group";
 import { useRouter } from "next/router";
+import { useAuthState } from "../context/auth";
 
 function PageRegister() {
   const router = useRouter();
@@ -13,6 +14,12 @@ function PageRegister() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<any>({});
+
+  const { authenticated } = useAuthState();
+
+  if (authenticated) {
+    router.push("/");
+  }
 
   const handleFormSubmit = async (event: FormEvent) => {
     event.preventDefault();
