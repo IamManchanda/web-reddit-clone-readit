@@ -13,13 +13,11 @@ function PageIndex() {
       <Head>
         <title>Readit: The Front Page of the Internet</title>
       </Head>
-      <div className="pt-12">
-        <div className="container flex pt-4">
-          <div className="w-160">
-            {posts?.map((post) => (
-              <PostCard post={post} key={post.identifier} />
-            ))}
-          </div>
+      <div className="container flex pt-4">
+        <div className="w-160">
+          {posts?.map((post) => (
+            <PostCard post={post} key={post.identifier} />
+          ))}
         </div>
       </div>
     </Fragment>
