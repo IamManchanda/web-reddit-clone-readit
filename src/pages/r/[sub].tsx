@@ -7,7 +7,11 @@ import PostCard from "../../components/post-card";
 function PageSubreddit() {
   const router = useRouter();
   const { sub: subName } = router.query;
-  const { data: sub } = useSWR(subName ? `/subs/${subName}` : "");
+  const { data: sub, error } = useSWR(subName ? `/subs/${subName}` : "");
+
+  if (error) {
+    router.push("/");
+  }
 
   let postsMarkup;
   if (!sub) {
