@@ -3,20 +3,10 @@ import { Fragment, useEffect, useState } from "react";
 import axios from "axios";
 import { Post } from "../types";
 import PostCard from "../components/post-card";
+import useSWR from "swr";
 
 function PageIndex() {
-  const [posts, setPosts] = useState<Post[]>([]);
-
-  useEffect(() => {
-    (async function readPosts() {
-      try {
-        const res = await axios.get("/posts");
-        setPosts(res.data);
-      } catch (error) {
-        console.log({ error });
-      }
-    })();
-  }, []);
+  const { data: posts } = useSWR("/posts");
 
   return (
     <Fragment>
@@ -26,7 +16,7 @@ function PageIndex() {
       <div className="pt-12">
         <div className="container flex pt-4">
           <div className="w-160">
-            {posts.map((post) => (
+            {posts?.map((post) => (
               <PostCard post={post} key={post.identifier} />
             ))}
           </div>
