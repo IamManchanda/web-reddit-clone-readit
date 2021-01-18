@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import PostCard from "../../components/post-card";
 
-function PageSubreddit() {
+function PageSub() {
   const router = useRouter();
   const { sub: subName } = router.query;
   const { data: sub, error } = useSWR(subName ? `/subs/${subName}` : "");
@@ -29,7 +29,7 @@ function PageSubreddit() {
   return (
     <Fragment>
       <Head>
-        <title>Subreddit: {subName}</title>
+        <title>{sub?.title}</title>
       </Head>
       <div className="container flex pt-5">
         {sub && <div className="w-160">{postsMarkup}</div>}
@@ -38,4 +38,4 @@ function PageSubreddit() {
   );
 }
 
-export default PageSubreddit;
+export default PageSub;
