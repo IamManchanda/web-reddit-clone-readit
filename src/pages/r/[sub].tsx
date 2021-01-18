@@ -1,4 +1,4 @@
-import { createRef, Fragment, useEffect, useState } from "react";
+import { ChangeEvent, createRef, Fragment, useEffect, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -7,6 +7,7 @@ import PostCard from "../../components/post-card";
 import { Sub } from "../../types";
 import { useAuthState } from "../../context/auth";
 import classNames from "classnames";
+import axios from "axios";
 
 function PageSub() {
   const [ownSub, setOwnSub] = useState(false);
@@ -16,7 +17,9 @@ function PageSub() {
   const router = useRouter();
   const fileInputRef = createRef<HTMLInputElement>();
   const { sub: subName } = router.query;
-  const { data: sub, error } = useSWR<Sub>(subName ? `/subs/${subName}` : "");
+  const { data: sub, error, revalidate } = useSWR<Sub>(
+    subName ? `/subs/${subName}` : null,
+  );
 
   useEffect(() => {
     if (!sub) {
@@ -25,6 +28,35 @@ function PageSub() {
 
     setOwnSub(authenticated && user.username === sub.username);
   }, [sub]);
+
+  const openFileInput = (type: string) => {
+    if (!ownSub) {
+      return;
+    }
+
+    fileInputRef.current.name = type;
+    fileInputRef.current.click();
+  };
+
+  const uploadImage = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files[0];
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("type", fileInputRef.current.name);
+
+    try {
+      await axios.post<Sub>(`/subs/${sub.name}/image`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      revalidate();
+    } catch (error) {
+      console.log({ error });
+    }
+  };
 
   if (error) {
     router.push("/");
@@ -50,12 +82,18 @@ function PageSub() {
       </Head>
       {sub && (
         <Fragment>
-          <input type="file" hidden={true} ref={fileInputRef} />
+          <input
+            type="file"
+            hidden={true}
+            ref={fileInputRef}
+            onChange={uploadImage}
+          />
           <div>
             <div
               className={classNames("bg-blue-500", {
                 "cursor-pointer": ownSub,
               })}
+              onClick={() => openFileInput("banner")}
             >
               {sub.bannerUrl ? (
                 <div
@@ -81,6 +119,7 @@ function PageSub() {
                     className={classNames("rounded-full", {
                       "cursor-pointer": ownSub,
                     })}
+                    onClick={() => openFileInput("image")}
                     width={70}
                     height={70}
                   />
