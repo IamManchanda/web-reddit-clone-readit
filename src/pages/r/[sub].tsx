@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import useSWR from "swr";
 import PostCard from "../../components/post-card";
 import { Sub } from "../../types";
@@ -34,20 +35,34 @@ function PageSub() {
       </Head>
       {sub && (
         <Fragment>
-          <div className="bg-blue-500">
-            {sub.bannerUrl ? (
-              <div
-                className="h-56 bg-blue-500"
-                style={{
-                  backgroundImage: `url(${sub.bannerUrl})`,
-                  backgroundRepeat: "no-repeat",
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              />
-            ) : (
-              <div className="h-20 bg-blue-500" />
-            )}
+          <div>
+            <div className="bg-blue-500">
+              {sub.bannerUrl ? (
+                <div
+                  className="h-56 bg-blue-500"
+                  style={{
+                    backgroundImage: `url(${sub.bannerUrl})`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                />
+              ) : (
+                <div className="h-20 bg-blue-500" />
+              )}
+            </div>
+            <div className="h-20 bg-white">
+              <div className="container flex">
+                <Image
+                  src={sub.imageUrl}
+                  alt="Sub"
+                  title="Sub"
+                  className="rounded-full"
+                  width={80}
+                  height={80}
+                />
+              </div>
+            </div>
           </div>
           <div className="container flex pt-5">
             <div className="w-160">{postsMarkup}</div>
