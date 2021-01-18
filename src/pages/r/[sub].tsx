@@ -1,15 +1,30 @@
-import { Fragment } from "react";
+import { createRef, Fragment, useEffect, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import useSWR from "swr";
 import PostCard from "../../components/post-card";
 import { Sub } from "../../types";
+import { useAuthState } from "../../context/auth";
+import classNames from "classnames";
 
 function PageSub() {
+  const [ownSub, setOwnSub] = useState(false);
+
+  const { authenticated, user } = useAuthState();
+
   const router = useRouter();
+  const fileInputRef = createRef<HTMLInputElement>();
   const { sub: subName } = router.query;
   const { data: sub, error } = useSWR<Sub>(subName ? `/subs/${subName}` : "");
+
+  useEffect(() => {
+    if (!sub) {
+      return;
+    }
+
+    setOwnSub(authenticated && user.username === sub.username);
+  }, [sub]);
 
   if (error) {
     router.push("/");
@@ -35,8 +50,13 @@ function PageSub() {
       </Head>
       {sub && (
         <Fragment>
+          <input type="file" hidden={true} ref={fileInputRef} />
           <div>
-            <div className="bg-blue-500">
+            <div
+              className={classNames("bg-blue-500", {
+                "cursor-pointer": ownSub,
+              })}
+            >
               {sub.bannerUrl ? (
                 <div
                   className="h-56 bg-blue-500"
@@ -58,7 +78,9 @@ function PageSub() {
                     src={sub.imageUrl}
                     alt="Sub"
                     title="Sub"
-                    className="rounded-full"
+                    className={classNames("rounded-full", {
+                      "cursor-pointer": ownSub,
+                    })}
                     width={70}
                     height={70}
                   />
