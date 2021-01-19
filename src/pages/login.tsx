@@ -17,6 +17,7 @@ function PageLogin() {
   const { authenticated } = useAuthState();
 
   if (authenticated) {
+    // router.back();
     router.push("/");
   }
 
