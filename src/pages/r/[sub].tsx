@@ -8,6 +8,7 @@ import { Sub } from "../../types";
 import { useAuthState } from "../../context/auth";
 import classNames from "classnames";
 import axios from "axios";
+import Sidebar from '../../components/sidebar';
 
 function PageSub() {
   const [ownSub, setOwnSub] = useState(false);
@@ -137,6 +138,7 @@ function PageSub() {
           </div>
           <div className="container flex pt-5">
             <div className="w-160">{postsMarkup}</div>
+            <Sidebar sub={sub} />
           </div>
         </Fragment>
       )}
