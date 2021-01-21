@@ -1,9 +1,16 @@
+import axios from "axios";
 import Head from "next/head";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import classNames from "classnames";
 import useSWR from "swr";
+import Sidebar from "../../../../components/sidebar";
 import { Post } from "../../../../types";
+
+dayjs.extend(relativeTime);
 
 function PageSubIdentifierSlug() {
   const router = useRouter();
@@ -11,6 +18,19 @@ function PageSubIdentifierSlug() {
   const { data: post, error } = useSWR<Post>(
     identifier && slug ? `/posts/${identifier}/${slug}` : null,
   );
+
+  const vote = async (value: number) => {
+    try {
+      const res = await axios.post("/misc/vote", {
+        identifier,
+        slug,
+        value,
+      });
+      console.log(res.data);
+    } catch (error) {
+      console.log({ error });
+    }
+  };
 
   if (error) {
     router.push("/");
@@ -37,6 +57,40 @@ function PageSubIdentifierSlug() {
           </div>
         </a>
       </Link>
+      <div className="container flex pt-5">
+        <div className="w-160">
+          <div className="bg-white rounded">
+            {post && (
+              <div className="flex">
+                <div className="w-10 py-3 text-center bg-gray-200 rounded-l">
+                  <div
+                    className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
+                    onClick={() => vote(1)}
+                  >
+                    <i
+                      className={classNames("icon-arrow-up", {
+                        "text-red-500": post.userVote === 1,
+                      })}
+                    />
+                  </div>
+                  <p className="text-xs font-bold">{post.voteScore}</p>
+                  <div
+                    className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-600"
+                    onClick={() => vote(-1)}
+                  >
+                    <i
+                      className={classNames("icon-arrow-down", {
+                        "text-blue-600": post.userVote === -1,
+                      })}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        {post && <Sidebar sub={post.sub} />}
+      </div>
     </>
   );
 }
