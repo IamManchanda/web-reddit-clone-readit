@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { Fragment } from "react";
 import Image from "next/image";
 import PostCard from "../components/post-card";
 import useSWR from "swr";
@@ -11,7 +10,7 @@ function PageIndex() {
   const { data: topSubs } = useSWR("/misc/top-subs");
 
   return (
-    <Fragment>
+    <>
       <Head>
         <title>Readit: The Front Page of the Internet</title>
       </Head>
@@ -56,7 +55,7 @@ function PageIndex() {
           </div>
         </div>
       </div>
-    </Fragment>
+    </>
   );
 }
 

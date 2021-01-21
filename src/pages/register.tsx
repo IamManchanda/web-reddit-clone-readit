@@ -1,4 +1,4 @@
-import { FormEvent, Fragment, useState } from "react";
+import { FormEvent, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import axios from "axios";
@@ -41,7 +41,7 @@ function PageRegister() {
   };
 
   return (
-    <Fragment>
+    <>
       <Head>
         <title>Register</title>
       </Head>
@@ -112,7 +112,7 @@ function PageRegister() {
           </div>
         </div>
       </div>
-    </Fragment>
+    </>
   );
 }
 

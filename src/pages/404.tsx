@@ -1,10 +1,9 @@
-import { Fragment } from "react";
 import Head from "next/head";
 import Link from "next/link";
 
 function PageNotFound() {
   return (
-    <Fragment>
+    <>
       <Head>
         <title>404: Page Not Found</title>
       </Head>
@@ -15,7 +14,7 @@ function PageNotFound() {
           <a className="px-4 py-2 mt-4 blue button">Back to Homepage</a>
         </Link>
       </div>
-    </Fragment>
+    </>
   );
 }
 

@@ -1,6 +1,5 @@
 import axios from "axios";
 import Link from "next/link";
-import { Fragment } from "react";
 import RedditLogo from "../assets/images/reddit.svg";
 import { useAuthState, useAuthDispatch } from "../context/auth";
 
@@ -50,7 +49,7 @@ const Navbar: React.FC = () => {
               Log Out
             </button>
           ) : (
-            <Fragment>
+            <>
               <Link href="/login">
                 <a className="w-32 py-1 mr-4 leading-5 button blue hollow">
                   Log In
@@ -59,7 +58,7 @@ const Navbar: React.FC = () => {
               <Link href="/register">
                 <a className="w-32 py-1 leading-5 button blue">Sign Up</a>
               </Link>
-            </Fragment>
+            </>
           ))}
       </div>
     </div>

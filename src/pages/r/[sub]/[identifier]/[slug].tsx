@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -16,11 +15,11 @@ function PageSubIdentifierSlug() {
   }
 
   return (
-    <Fragment>
+    <>
       <Head>
         <title>{post?.title}</title>
       </Head>
-    </Fragment>
+    </>
   );
 }
 

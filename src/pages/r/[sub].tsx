@@ -1,4 +1,4 @@
-import { ChangeEvent, createRef, Fragment, useEffect, useState } from "react";
+import { ChangeEvent, createRef, useEffect, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -8,7 +8,7 @@ import { Sub } from "../../types";
 import { useAuthState } from "../../context/auth";
 import classNames from "classnames";
 import axios from "axios";
-import Sidebar from '../../components/sidebar';
+import Sidebar from "../../components/sidebar";
 
 function PageSub() {
   const [ownSub, setOwnSub] = useState(false);
@@ -77,12 +77,12 @@ function PageSub() {
   }
 
   return (
-    <Fragment>
+    <>
       <Head>
         <title>{sub?.title}</title>
       </Head>
       {sub && (
-        <Fragment>
+        <>
           <input
             type="file"
             hidden={true}
@@ -140,9 +140,9 @@ function PageSub() {
             <div className="w-160">{postsMarkup}</div>
             <Sidebar sub={sub} />
           </div>
-        </Fragment>
+        </>
       )}
-    </Fragment>
+    </>
   );
 }
 

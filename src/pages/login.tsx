@@ -1,4 +1,4 @@
-import { FormEvent, Fragment, useState } from "react";
+import { FormEvent, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import axios from "axios";
@@ -34,7 +34,7 @@ function PageLogin() {
   };
 
   return (
-    <Fragment>
+    <>
       <Head>
         <title>Log In</title>
       </Head>
@@ -82,7 +82,7 @@ function PageLogin() {
           </div>
         </div>
       </div>
-    </Fragment>
+    </>
   );
 }
 
