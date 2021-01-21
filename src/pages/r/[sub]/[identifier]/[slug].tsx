@@ -95,6 +95,24 @@ function PageSubIdentifierSlug() {
                     />
                   </div>
                 </div>
+                <div className="p-2">
+                  <div className="flex items-center">
+                    <p className="text-xs text-gray-500">
+                      Posted by
+                      <Link href={`/u/${post.username}`}>
+                        <a className="mx-1 hover:underline">
+                          /u/{post.username}
+                        </a>
+                      </Link>
+                      <span>•</span>
+                      <Link href={post.url}>
+                        <a className="mx-1 hover:underline">
+                          {dayjs(post.createdAt).fromNow()}
+                        </a>
+                      </Link>
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
           </div>
