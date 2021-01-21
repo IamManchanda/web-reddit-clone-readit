@@ -98,7 +98,7 @@ const PostCard: React.FC<PostCardProps> = ({
           </p>
         </div>
         <Link href={url}>
-          <a className="my-1 text-lg font-medium">{title}</a>
+          <a className="my-1 text-lg font-medium hover:underline">{title}</a>
         </Link>
         {body && <p className="my-1 text-sm">{body}</p>}
         <div className="flex">
