@@ -32,7 +32,7 @@ const PostCard: React.FC<PostCardProps> = ({
     userVote,
   },
 }: PostCardProps) => {
-  const vote = async (value) => {
+  const vote = async (value: number) => {
     try {
       const res = await axios.post("/misc/vote", {
         identifier,
