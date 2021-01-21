@@ -26,6 +26,10 @@ function PageSubIdentifierSlug() {
       router.push("/login");
     }
 
+    if (value === post.userVote) {
+      value = 0;
+    }
+
     try {
       const res = await axios.post("/misc/vote", {
         identifier,
