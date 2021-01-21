@@ -9,10 +9,12 @@ import classNames from "classnames";
 import useSWR from "swr";
 import Sidebar from "../../../../components/sidebar";
 import { Post } from "../../../../types";
+import { useAuthState } from "../../../../context/auth";
 
 dayjs.extend(relativeTime);
 
 function PageSubIdentifierSlug() {
+  const { authenticated } = useAuthState();
   const router = useRouter();
   const { identifier, sub, slug } = router.query;
   const { data: post, error } = useSWR<Post>(
@@ -20,6 +22,10 @@ function PageSubIdentifierSlug() {
   );
 
   const vote = async (value: number) => {
+    if (!authenticated) {
+      router.push("/login");
+    }
+
     try {
       const res = await axios.post("/misc/vote", {
         identifier,
