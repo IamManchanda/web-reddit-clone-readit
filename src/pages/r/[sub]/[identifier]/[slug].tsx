@@ -10,6 +10,7 @@ import useSWR from "swr";
 import Sidebar from "../../../../components/sidebar";
 import { Post } from "../../../../types";
 import { useAuthState } from "../../../../context/auth";
+import ActionButton from "../../../../components/action-button";
 
 dayjs.extend(relativeTime);
 
@@ -111,6 +112,28 @@ function PageSubIdentifierSlug() {
                         </a>
                       </Link>
                     </p>
+                  </div>
+                  <h1 className="my-1 text-xl font-medium">{post.title}</h1>
+                  <p className="my-3 text-sm">{post.body}</p>
+                  <div className="flex">
+                    <Link href={post.url}>
+                      <a>
+                        <ActionButton>
+                          <i className="mr-1 fas fa-comment-alt fa-xs" />
+                          <span className="font-bold">
+                            {post.commentCount} Comments
+                          </span>
+                        </ActionButton>
+                      </a>
+                    </Link>
+                    <ActionButton>
+                      <i className="mr-1 fas fa-share fa-xs" />
+                      <span className="font-bold">Share</span>
+                    </ActionButton>
+                    <ActionButton>
+                      <i className="mr-1 fas fa-bookmark fa-xs" />
+                      <span className="font-bold">Save</span>
+                    </ActionButton>
                   </div>
                 </div>
               </div>
