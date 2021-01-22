@@ -29,12 +29,11 @@ const PostCard: React.FC<PostCardProps> = ({
 }: PostCardProps) => {
   const vote = async (value: number) => {
     try {
-      const res = await axios.post("/misc/vote", {
+      await axios.post("/misc/vote", {
         identifier,
         slug,
         value,
       });
-      console.log(res.data);
     } catch (error) {
       console.log({ error });
     }
