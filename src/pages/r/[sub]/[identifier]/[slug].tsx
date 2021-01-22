@@ -71,8 +71,8 @@ function PageSubIdentifierSlug() {
       });
       setNewComment("");
       revalidate();
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log({ error });
     }
   };
 
@@ -191,6 +191,7 @@ function PageSubIdentifierSlug() {
                           <button
                             className="px-3 py-1 blue button"
                             disabled={newComment.trim() === ""}
+                            type="submit"
                           >
                             Comment
                           </button>
