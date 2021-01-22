@@ -26,7 +26,7 @@ const PostCard: React.FC<PostCardProps> = ({
     voteScore,
     userVote,
   },
-}: PostCardProps) => {
+}) => {
   const vote = async (value: number) => {
     try {
       await axios.post("/misc/vote", {
