@@ -8,7 +8,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import classNames from "classnames";
 import useSWR from "swr";
 import Sidebar from "../../../../components/sidebar";
-import { Post } from "../../../../types";
+import { Post, Comment } from "../../../../types";
 import { useAuthState } from "../../../../context/auth";
 import ActionButton from "../../../../components/action-button";
 
@@ -18,26 +18,35 @@ function PageSubIdentifierSlug() {
   const { authenticated } = useAuthState();
   const router = useRouter();
   const { identifier, sub, slug } = router.query;
+
   const { data: post, error } = useSWR<Post>(
     identifier && slug ? `/posts/${identifier}/${slug}` : null,
   );
 
-  const vote = async (value: number) => {
+  const { data: comments, revalidate } = useSWR<Comment[]>(
+    identifier && slug ? `/posts/${identifier}/${slug}/comments` : null,
+  );
+
+  const vote = async (value: number, comment?: Comment) => {
     if (!authenticated) {
       router.push("/login");
     }
 
-    if (value === post.userVote) {
+    if (
+      (!comment && value === post.userVote) ||
+      (comment && comment.userVote === value)
+    ) {
       value = 0;
     }
 
     try {
-      const res = await axios.post("/misc/vote", {
+      await axios.post("/misc/vote", {
         identifier,
         slug,
         value,
+        commentIdentifier: comment?.identifier,
       });
-      console.log(res.data);
+      revalidate();
     } catch (error) {
       console.log({ error });
     }
@@ -72,71 +81,115 @@ function PageSubIdentifierSlug() {
         <div className="w-160">
           <div className="bg-white rounded">
             {post && (
-              <div className="flex">
-                <div className="w-10 py-3 text-center rounded-l">
-                  <div
-                    className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
-                    onClick={() => vote(1)}
-                  >
-                    <i
-                      className={classNames("icon-arrow-up", {
-                        "text-red-500": post.userVote === 1,
-                      })}
-                    />
+              <>
+                <div className="flex">
+                  <div className="flex-shrink-0 w-10 py-2 text-center rounded-l">
+                    <div
+                      className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
+                      onClick={() => vote(1)}
+                    >
+                      <i
+                        className={classNames("icon-arrow-up", {
+                          "text-red-500": post.userVote === 1,
+                        })}
+                      />
+                    </div>
+                    <p className="text-xs font-bold">{post.voteScore}</p>
+                    <div
+                      className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-600"
+                      onClick={() => vote(-1)}
+                    >
+                      <i
+                        className={classNames("icon-arrow-down", {
+                          "text-blue-600": post.userVote === -1,
+                        })}
+                      />
+                    </div>
                   </div>
-                  <p className="text-xs font-bold">{post.voteScore}</p>
-                  <div
-                    className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-600"
-                    onClick={() => vote(-1)}
-                  >
-                    <i
-                      className={classNames("icon-arrow-down", {
-                        "text-blue-600": post.userVote === -1,
-                      })}
-                    />
-                  </div>
-                </div>
-                <div className="p-2">
-                  <div className="flex items-center">
-                    <p className="text-xs text-gray-500">
-                      Posted by
-                      <Link href={`/u/${post.username}`}>
-                        <a className="mx-1 hover:underline">
-                          /u/{post.username}
-                        </a>
-                      </Link>
-                      <span>•</span>
+                  <div className="py-2 pr-2">
+                    <div className="flex items-center">
+                      <p className="text-xs text-gray-500">
+                        Posted by
+                        <Link href={`/u/${post.username}`}>
+                          <a className="mx-1 hover:underline">
+                            /u/{post.username}
+                          </a>
+                        </Link>
+                        <span>•</span>
+                        <Link href={post.url}>
+                          <a className="mx-1 hover:underline">
+                            {dayjs(post.createdAt).fromNow()}
+                          </a>
+                        </Link>
+                      </p>
+                    </div>
+                    <h1 className="my-1 text-xl font-medium">{post.title}</h1>
+                    <p className="my-3 text-sm">{post.body}</p>
+                    <div className="flex">
                       <Link href={post.url}>
-                        <a className="mx-1 hover:underline">
-                          {dayjs(post.createdAt).fromNow()}
+                        <a>
+                          <ActionButton>
+                            <i className="mr-1 fas fa-comment-alt fa-xs" />
+                            <span className="font-bold">
+                              {post.commentCount} Comments
+                            </span>
+                          </ActionButton>
                         </a>
                       </Link>
-                    </p>
-                  </div>
-                  <h1 className="my-1 text-xl font-medium">{post.title}</h1>
-                  <p className="my-3 text-sm">{post.body}</p>
-                  <div className="flex">
-                    <Link href={post.url}>
-                      <a>
-                        <ActionButton>
-                          <i className="mr-1 fas fa-comment-alt fa-xs" />
-                          <span className="font-bold">
-                            {post.commentCount} Comments
-                          </span>
-                        </ActionButton>
-                      </a>
-                    </Link>
-                    <ActionButton>
-                      <i className="mr-1 fas fa-share fa-xs" />
-                      <span className="font-bold">Share</span>
-                    </ActionButton>
-                    <ActionButton>
-                      <i className="mr-1 fas fa-bookmark fa-xs" />
-                      <span className="font-bold">Save</span>
-                    </ActionButton>
+                      <ActionButton>
+                        <i className="mr-1 fas fa-share fa-xs" />
+                        <span className="font-bold">Share</span>
+                      </ActionButton>
+                      <ActionButton>
+                        <i className="mr-1 fas fa-bookmark fa-xs" />
+                        <span className="font-bold">Save</span>
+                      </ActionButton>
+                    </div>
                   </div>
                 </div>
-              </div>
+                <hr className="my-2" />
+                {comments?.map((comment) => (
+                  <div className="flex" key={comment.identifier}>
+                    <div className="flex-shrink-0 w-10 py-2 text-center rounded-l">
+                      <div
+                        className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
+                        onClick={() => vote(1, comment)}
+                      >
+                        <i
+                          className={classNames("icon-arrow-up", {
+                            "text-red-500": comment.userVote === 1,
+                          })}
+                        />
+                      </div>
+                      <p className="text-xs font-bold">{comment.voteScore}</p>
+                      <div
+                        className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-600"
+                        onClick={() => vote(-1, comment)}
+                      >
+                        <i
+                          className={classNames("icon-arrow-down", {
+                            "text-blue-600": comment.userVote === -1,
+                          })}
+                        />
+                      </div>
+                    </div>
+                    <div className="py-2 pr-2">
+                      <p className="mb-1 text-xs leading-none">
+                        <Link href={`/u/${comment.username}`}>
+                          <a className="mr-1 font-bold hover:underline">
+                            {comment.username}
+                          </a>
+                        </Link>
+                        <span className="text-gray-600">
+                          {comment.voteScore} points <span>•</span>{" "}
+                          {dayjs(comment.createdAt).fromNow()}
+                        </span>
+                      </p>
+                      <p>{comment.body}</p>
+                    </div>
+                  </div>
+                ))}
+              </>
             )}
           </div>
         </div>
