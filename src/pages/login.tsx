@@ -17,7 +17,6 @@ function PageLogin() {
   const { authenticated } = useAuthState();
 
   if (authenticated) {
-    // router.back();
     router.push("/");
   }
 
@@ -27,6 +26,16 @@ function PageLogin() {
     try {
       const res = await axios.post("/auth/login", { username, password });
       dispatch("LOGIN", res.data);
+      // TODO
+      // router.back();
+      // or,
+      /**
+       * if (typeof router.query.next === "string") {
+       *   router.push(router.query.next);
+       * } else {
+       *   router.push("/");
+       * }
+       */
       router.push("/");
     } catch (error) {
       setErrors(error.response.data);
