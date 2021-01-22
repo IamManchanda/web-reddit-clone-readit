@@ -2,8 +2,7 @@ import axios from "axios";
 import { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { SWRConfig } from "swr";
-import "../assets/styles/scss/icons.scss";
-import "../assets/styles/scss/tailwind.scss";
+import "../assets/styles/scss/index.scss";
 import Navbar from "../components/navbar";
 import { AuthProvider } from "../context/auth";
 
