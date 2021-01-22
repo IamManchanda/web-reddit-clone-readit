@@ -1,14 +1,14 @@
-import { ChangeEvent, createRef, useEffect, useState } from "react";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import Image from "next/image";
-import useSWR from "swr";
-import PostCard from "../../components/post-card";
-import { Sub } from "../../types";
-import { useAuthState } from "../../context/auth";
-import classNames from "classnames";
 import axios from "axios";
-import Sidebar from "../../components/sidebar";
+import classNames from "classnames";
+import Head from "next/head";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { ChangeEvent, createRef, useEffect, useState } from "react";
+import useSWR from "swr";
+import PostCard from "../../../components/post-card";
+import Sidebar from "../../../components/sidebar";
+import { useAuthState } from "../../../context/auth";
+import { Sub } from "../../../types";
 
 function PageSub() {
   const [ownSub, setOwnSub] = useState(false);
