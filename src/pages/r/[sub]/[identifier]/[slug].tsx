@@ -1,27 +1,33 @@
 import axios from "axios";
+import classNames from "classnames";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import classNames from "classnames";
+import { FormEvent, useState } from "react";
 import useSWR from "swr";
-import Sidebar from "../../../../components/sidebar";
-import { Post, Comment } from "../../../../types";
-import { useAuthState } from "../../../../context/auth";
 import ActionButton from "../../../../components/action-button";
+import Sidebar from "../../../../components/sidebar";
+import { useAuthState } from "../../../../context/auth";
+import { Comment, Post } from "../../../../types";
 
 dayjs.extend(relativeTime);
 
 function PageSubIdentifierSlug() {
-  const { authenticated } = useAuthState();
+  const [newComment, setNewComment] = useState("");
+  const { authenticated, user } = useAuthState();
   const router = useRouter();
   const { identifier, sub, slug } = router.query;
 
   const { data: post, error } = useSWR<Post>(
     identifier && slug ? `/posts/${identifier}/${slug}` : null,
   );
+
+  if (error) {
+    router.push("/");
+  }
 
   const { data: comments, revalidate } = useSWR<Comment[]>(
     identifier && slug ? `/posts/${identifier}/${slug}/comments` : null,
@@ -52,9 +58,23 @@ function PageSubIdentifierSlug() {
     }
   };
 
-  if (error) {
-    router.push("/");
-  }
+  const submitComment = async (event: FormEvent) => {
+    event.preventDefault();
+
+    if (newComment.trim() === "") {
+      return;
+    }
+
+    try {
+      await axios.post(`/posts/${post.identifier}/${post.slug}/comments`, {
+        body: newComment,
+      });
+      setNewComment("");
+      revalidate();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <>
@@ -146,6 +166,54 @@ function PageSubIdentifierSlug() {
                       </ActionButton>
                     </div>
                   </div>
+                </div>
+                <div className="pl-10 pr-6 mb-4">
+                  {authenticated ? (
+                    <div>
+                      <p className="mb-1 text-xs">
+                        Comment as{" "}
+                        <Link href={`/u/${user.username}`}>
+                          <a className="font-semibold text-blue-500">
+                            {user.username}
+                          </a>
+                        </Link>
+                      </p>
+                      <form onSubmit={submitComment}>
+                        <textarea
+                          className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-gray-600"
+                          onChange={(event) =>
+                            setNewComment(event.target.value)
+                          }
+                          value={newComment}
+                          placeholder="Enter a comment"
+                        />
+                        <div className="flex justify-end">
+                          <button
+                            className="px-3 py-1 blue button"
+                            disabled={newComment.trim() === ""}
+                          >
+                            Comment
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between px-2 py-4 border border-gray-200 rounded">
+                      <p className="font-semibold text-gray-400">
+                        Log In or Sign Up to leave a comment
+                      </p>
+                      <div>
+                        <Link href="/login">
+                          <a className="px-4 py-1 mr-4 hollow blue button">
+                            Log In
+                          </a>
+                        </Link>
+                        <Link href="/register">
+                          <a className="px-4 py-1 blue button">Sign Up</a>
+                        </Link>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <hr className="my-2" />
                 {comments?.map((comment) => (
