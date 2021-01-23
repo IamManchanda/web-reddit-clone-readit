@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -64,6 +65,24 @@ function PageUsername() {
                 );
               }
             })}
+          </div>
+          <div className="ml-6 w-80">
+            <div className="bg-white rounded">
+              <div className="p-3 bg-blue-500 rounded-t">
+                <img
+                  src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=retro&f=y"
+                  alt="user profile"
+                  className="w-16 h-16 mx-auto border-2 border-white rounded-full"
+                />
+              </div>
+              <div className="p-3 text-center">
+                <h1 className="mb-3 text-xl">{data.user.username}</h1>
+                <hr />
+                <p className="mt-3 mb-2">
+                  Joined {dayjs(data.user.createdAt).format("MMM YYYY")}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       )}
