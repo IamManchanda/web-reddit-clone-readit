@@ -1,4 +1,5 @@
 import axios from "axios";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
@@ -90,5 +91,29 @@ function PageSubSubmit() {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  try {
+    const { cookie } = req.headers;
+
+    if (!cookie) {
+      throw new Error("Missing auth token cookie");
+    }
+
+    await axios.get("/auth/me", {
+      headers: { cookie },
+    });
+
+    return {
+      props: {},
+    };
+  } catch (error) {
+    res
+      .writeHead(307, {
+        Location: "/login",
+      })
+      .end();
+  }
+};
 
 export default PageSubSubmit;
