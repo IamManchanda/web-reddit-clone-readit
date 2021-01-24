@@ -1,7 +1,7 @@
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RedditLogo from "../assets/images/reddit.svg";
 import { useAuthState, useAuthDispatch } from "../context/auth";
 import { Sub } from "../types";
@@ -9,6 +9,7 @@ import { Sub } from "../types";
 const Navbar: React.FC = () => {
   const [name, setName] = useState("");
   const [subs, setSubs] = useState<Sub[]>([]);
+  const [timer, setTimer] = useState(null);
   const { authenticated, loading } = useAuthState();
   const dispatch = useAuthDispatch();
 
@@ -22,15 +23,27 @@ const Navbar: React.FC = () => {
     }
   };
 
-  const searchSubs = async (subName: string) => {
-    setName(subName);
-
-    try {
-      const { data } = await axios.get(`/subs/search/${subName}`);
-      setSubs(data);
-    } catch (error) {
-      console.log({ error });
+  useEffect(() => {
+    if (name.trim() === "") {
+      setSubs([]);
+      return;
     }
+    searchSubs();
+  }, [name]);
+
+  const searchSubs = async () => {
+    clearTimeout(timer);
+
+    setTimer(
+      setTimeout(async () => {
+        try {
+          const { data } = await axios.get(`/subs/search/${name}`);
+          setSubs(data);
+        } catch (error) {
+          console.log({ error });
+        }
+      }, 250),
+    );
   };
 
   return (
@@ -54,7 +67,7 @@ const Navbar: React.FC = () => {
           placeholder="Search..."
           className="py-1 pr-3 bg-transparent rounded w-160 focus:outline-none"
           value={name}
-          onChange={(event) => searchSubs(event.target.value)}
+          onChange={(event) => setName(event.target.value)}
         />
         <div
           className="absolute left-0 right-0 bg-white"
