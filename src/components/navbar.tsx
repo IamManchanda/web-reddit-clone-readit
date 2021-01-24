@@ -1,9 +1,10 @@
 import axios from "axios";
-import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import RedditLogo from "../assets/images/reddit.svg";
-import { useAuthState, useAuthDispatch } from "../context/auth";
+import { useAuthDispatch, useAuthState } from "../context/auth";
 import { Sub } from "../types";
 
 const Navbar: React.FC = () => {
@@ -12,6 +13,7 @@ const Navbar: React.FC = () => {
   const [timer, setTimer] = useState(null);
   const { authenticated, loading } = useAuthState();
   const dispatch = useAuthDispatch();
+  const router = useRouter();
 
   const logout = async () => {
     try {
@@ -31,7 +33,7 @@ const Navbar: React.FC = () => {
     searchSubs();
   }, [name]);
 
-  const searchSubs = async () => {
+  const searchSubs = () => {
     clearTimeout(timer);
 
     setTimer(
@@ -44,6 +46,11 @@ const Navbar: React.FC = () => {
         }
       }, 250),
     );
+  };
+
+  const goToSub = (subName: string) => {
+    router.push(`/r/${subName}`);
+    setName("");
   };
 
   return (
@@ -79,6 +86,7 @@ const Navbar: React.FC = () => {
             <div
               key={index}
               className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-200"
+              onClick={() => goToSub(sub.name)}
             >
               <Image
                 src={sub.imageUrl}
