@@ -16,10 +16,6 @@ function PageUsername() {
     router.push("/");
   }
 
-  if (data) {
-    console.log({ data });
-  }
-
   return (
     <>
       <Head>
