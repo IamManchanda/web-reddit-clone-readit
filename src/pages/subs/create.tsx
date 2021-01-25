@@ -83,6 +83,14 @@ function CreateSubs() {
                   onChange={(event) => setDescription(event.target.value)}
                 />
               </div>
+
+              <div className="flex justify-end">
+                <button type="submit" className="px-4 py-1 blue button">
+                  <span className="text-sm font-semibold capitalize">
+                    Create Community
+                  </span>
+                </button>
+              </div>
             </form>
           </div>
         </div>
