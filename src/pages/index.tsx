@@ -4,10 +4,12 @@ import PostCard from "../components/post-card";
 import useSWR from "swr";
 import { Post, Sub } from "../types";
 import Link from "next/link";
+import { useAuthState } from "../context/auth";
 
 function PageIndex() {
   const { data: posts } = useSWR<Post[]>("/posts");
   const { data: topSubs } = useSWR<Sub[]>("/misc/top-subs");
+  const { authenticated } = useAuthState();
 
   return (
     <>
@@ -51,6 +53,15 @@ function PageIndex() {
                 </div>
               ))}
             </div>
+            {authenticated && (
+              <div className="p-4 border-t-2">
+                <Link href="/subs/create">
+                  <a className="w-full px-2 py-1 blue button">
+                    Create Community
+                  </a>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
