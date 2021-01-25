@@ -2,6 +2,7 @@ import axios from "axios";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useState } from "react";
+import classNames from "classnames";
 
 function CreateSubs() {
   const [name, setName] = useState("");
@@ -26,6 +27,63 @@ function CreateSubs() {
         <div className="flex flex-col justify-center pl-6">
           <div className="w-98">
             <h1 className="mb-2 text-lg font-medium">Create a Community</h1>
+            <hr />
+            <form>
+              <div className="my-6">
+                <p className="font-medium">Name</p>
+                <p className="mb-2 text-xs text-gray-500">
+                  Community names including capitalization cannot be changed.
+                </p>
+                <input
+                  type="text"
+                  className={classNames(
+                    "w-full p-3 border border-gray-200 rounded hover:border-gray-500",
+                    {
+                      "border-red-600": errors.name,
+                    },
+                  )}
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                />
+                <small className="font-medium text-red-600">
+                  {errors.name}
+                </small>
+              </div>
+
+              <div className="my-6">
+                <p className="font-medium">Title</p>
+                <p className="mb-2 text-xs text-gray-500">
+                  Community title represents the topic and you can change it any
+                  time.
+                </p>
+                <input
+                  type="text"
+                  className={classNames(
+                    "w-full p-3 border border-gray-200 rounded hover:border-gray-500",
+                    {
+                      "border-red-600": errors.title,
+                    },
+                  )}
+                  value={title}
+                  onChange={(event) => setTitle(event.target.value)}
+                />
+                <small className="font-medium text-red-600">
+                  {errors.title}
+                </small>
+              </div>
+
+              <div className="my-6">
+                <p className="font-medium">Description</p>
+                <p className="mb-2 text-xs text-gray-500">
+                  This is how new members come to understand your community.
+                </p>
+                <textarea
+                  className="w-full p-3 border border-gray-200 rounded hover:border-gray-500"
+                  value={description}
+                  onChange={(event) => setDescription(event.target.value)}
+                />
+              </div>
+            </form>
           </div>
         </div>
       </div>
