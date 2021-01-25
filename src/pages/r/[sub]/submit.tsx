@@ -44,7 +44,7 @@ function PageSubSubmit() {
       </Head>
 
       <div className="container flex pt-5">
-        <div className="w-160">
+        <div className="w-full px-4 md:w-160 md:p-0">
           <div className="p-4 bg-white rounded">
             <h1 className="mb-3 text-lg">Submit a post to /r/{subName}</h1>
             <form onSubmit={submitPost}>

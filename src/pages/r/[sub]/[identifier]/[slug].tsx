@@ -98,7 +98,7 @@ function PageSubIdentifierSlug() {
         </a>
       </Link>
       <div className="container flex pt-5">
-        <div className="w-160">
+        <div className="w-full px-4 md:w-160 md:p-0">
           <div className="bg-white rounded">
             {post && (
               <>
