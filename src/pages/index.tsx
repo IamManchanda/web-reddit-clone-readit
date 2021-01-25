@@ -6,8 +6,8 @@ import { Post, Sub } from "../types";
 import Link from "next/link";
 
 function PageIndex() {
-  const { data: posts } = useSWR("/posts");
-  const { data: topSubs } = useSWR("/misc/top-subs");
+  const { data: posts } = useSWR<Post[]>("/posts");
+  const { data: topSubs } = useSWR<Sub[]>("/misc/top-subs");
 
   return (
     <>
@@ -16,7 +16,7 @@ function PageIndex() {
       </Head>
       <div className="container flex pt-5">
         <div className="w-160">
-          {posts?.map((post: Post) => (
+          {posts?.map((post) => (
             <PostCard key={post.identifier} post={post} />
           ))}
         </div>
@@ -28,7 +28,7 @@ function PageIndex() {
               </p>
             </div>
             <div>
-              {topSubs?.map((sub: Sub) => (
+              {topSubs?.map((sub) => (
                 <div
                   key={sub.name}
                   className="flex items-center px-4 py-2 text-xs border-b"
