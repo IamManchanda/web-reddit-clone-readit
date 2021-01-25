@@ -1,8 +1,9 @@
 import axios from "axios";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import classNames from "classnames";
+import { useRouter } from "next/router";
 
 function CreateSubs() {
   const [name, setName] = useState("");
@@ -10,6 +11,25 @@ function CreateSubs() {
   const [description, setDescription] = useState("");
 
   const [errors, setErrors] = useState<Partial<any>>({});
+
+  const router = useRouter();
+
+  const submitForm = async (event: FormEvent) => {
+    event.preventDefault();
+
+    try {
+      const res = await axios.post("/subs", {
+        name,
+        title,
+        description,
+      });
+
+      router.push(`/r/${res.data.name}`);
+    } catch (error) {
+      console.log({ error });
+      setErrors(error.response.data);
+    }
+  };
 
   return (
     <>
@@ -28,7 +48,7 @@ function CreateSubs() {
           <div className="w-98">
             <h1 className="mb-2 text-lg font-medium">Create a Community</h1>
             <hr />
-            <form>
+            <form onSubmit={submitForm}>
               <div className="my-6">
                 <p className="font-medium">Name</p>
                 <p className="mb-2 text-xs text-gray-500">
