@@ -54,61 +54,63 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-x-0 top-0 z-10 flex items-center justify-center h-12 px-5 bg-white">
+    <div className="fixed inset-x-0 top-0 z-10 flex items-center justify-between h-12 px-5 bg-white">
       <div className="flex items-center">
         <Link href="/">
           <a>
             <RedditLogo className="w-8 h-8 mr-2" />
           </a>
         </Link>
-        <span className="text-2xl font-semibold">
+        <span className="hidden text-2xl font-semibold lg:block">
           <Link href="/">
             <a>readit</a>
           </Link>
         </span>
       </div>
-      <div className="relative flex items-center mx-auto bg-gray-100 border rounded hover:border-blue-500 hover:bg-white">
-        <i className="pl-4 pr-3 text-gray-500 fas fa-search" />
-        <input
-          type="text"
-          placeholder="Search..."
-          className="py-1 pr-3 bg-transparent rounded w-160 focus:outline-none"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-        />
-        <div
-          className="absolute left-0 right-0 bg-white"
-          style={{
-            top: "100%",
-          }}
-        >
-          {subs?.map((sub, index) => (
-            <div
-              key={index}
-              className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-200"
-              onClick={() => goToSub(sub.name)}
-            >
-              <Image
-                src={sub.imageUrl}
-                className="rounded-full"
-                alt="Sub"
-                title="Sub"
-                width={32}
-                height={32}
-              />
-              <div className="ml-4 text-sm">
-                <p className="font-medium">{sub.name}</p>
-                <p className="text-gray-600">{sub.title}</p>
+      <div className="max-w-full px-4 w-160">
+        <div className="relative flex items-center bg-gray-100 border rounded hover:border-blue-500 hover:bg-white">
+          <i className="pl-4 pr-3 text-gray-500 fas fa-search" />
+          <input
+            type="text"
+            placeholder="Search..."
+            className="py-1 pr-3 bg-transparent rounded focus:outline-none"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
+          <div
+            className="absolute left-0 right-0 bg-white"
+            style={{
+              top: "100%",
+            }}
+          >
+            {subs?.map((sub, index) => (
+              <div
+                key={index}
+                className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-200"
+                onClick={() => goToSub(sub.name)}
+              >
+                <Image
+                  src={sub.imageUrl}
+                  className="rounded-full"
+                  alt="Sub"
+                  title="Sub"
+                  width={32}
+                  height={32}
+                />
+                <div className="ml-4 text-sm">
+                  <p className="font-medium">{sub.name}</p>
+                  <p className="text-gray-600">{sub.title}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
       <div className="flex">
         {!loading &&
           (authenticated ? (
             <button
-              className="w-32 py-1 mr-4 leading-5 button blue hollow"
+              className="hidden w-20 py-1 mr-4 leading-5 button blue hollow sm:block lg:w-32"
               onClick={logout}
             >
               Log Out
@@ -116,12 +118,14 @@ const Navbar: React.FC = () => {
           ) : (
             <>
               <Link href="/login">
-                <a className="w-32 py-1 mr-4 leading-5 button blue hollow">
+                <a className="hidden w-20 py-1 mr-4 leading-5 button blue hollow sm:block lg:w-32">
                   Log In
                 </a>
               </Link>
               <Link href="/register">
-                <a className="w-32 py-1 leading-5 button blue">Sign Up</a>
+                <a className="hidden w-20 py-1 leading-5 button blue sm:block lg:w-32">
+                  Sign Up
+                </a>
               </Link>
             </>
           ))}
