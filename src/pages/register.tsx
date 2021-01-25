@@ -52,7 +52,7 @@ function PageRegister() {
           style={{
             backgroundImage: "url('/images/bricks.jpg')",
           }}
-        ></div>
+        />
         <div className="flex flex-col justify-center pl-6">
           <div className="w-70">
             <h1 className="mb-2 text-lg font-medium">Sign up</h1>
