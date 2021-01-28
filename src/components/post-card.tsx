@@ -5,11 +5,14 @@ import { Post } from "../types";
 import axios from "axios";
 import classNames from "classnames";
 import ActionButton from "./action-button";
+import { useAuthState } from "../context/auth";
+import { useRouter } from "next/router";
 
 dayjs.extend(relativeTime);
 
 interface PostCardProps {
   post: Post;
+  revalidate?: Function;
 }
 
 const PostCard: React.FC<PostCardProps> = ({
@@ -26,21 +29,43 @@ const PostCard: React.FC<PostCardProps> = ({
     voteScore,
     userVote,
   },
+  revalidate,
 }) => {
+  const { authenticated } = useAuthState();
+  const router = useRouter();
+
   const vote = async (value: number) => {
+    if (!authenticated) {
+      router.push("/login");
+    }
+
+    if (value === userVote) {
+      value = 0;
+    }
+
     try {
-      await axios.post("/misc/vote", {
+      const res = await axios.post("/misc/vote", {
         identifier,
         slug,
         value,
       });
+
+      if (revalidate) {
+        revalidate();
+      }
+
+      console.log(res.data);
     } catch (error) {
       console.log({ error });
     }
   };
 
   return (
-    <div key={identifier} className="flex mb-4 bg-white rounded">
+    <div
+      key={identifier}
+      className="flex mb-4 bg-white rounded"
+      id={identifier}
+    >
       <div className="w-10 py-3 text-center bg-gray-200 rounded-l">
         <div
           className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"

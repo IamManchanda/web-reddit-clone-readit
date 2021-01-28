@@ -1,15 +1,61 @@
 import Head from "next/head";
 import Image from "next/image";
 import PostCard from "../components/post-card";
-import useSWR from "swr";
+import useSWR, { useSWRInfinite } from "swr";
 import { Post, Sub } from "../types";
 import Link from "next/link";
 import { useAuthState } from "../context/auth";
+import { useState, useEffect } from "react";
 
 function PageIndex() {
-  const { data: posts } = useSWR<Post[]>("/posts");
+  const [observedPost, setObservedPost] = useState("");
   const { data: topSubs } = useSWR<Sub[]>("/misc/top-subs");
   const { authenticated } = useAuthState();
+
+  const {
+    data,
+    error,
+    size: page,
+    setSize: setPage,
+    isValidating,
+    revalidate,
+  } = useSWRInfinite<Post[]>((index) => `/posts?page=${index}`);
+
+  const posts: Post[] = data ? [].concat(...data) : [];
+  const isInitialLoading = !data && !error;
+
+  useEffect(() => {
+    if (!posts || posts.length === 0) {
+      return;
+    }
+
+    const id = posts[posts.length - 1].identifier;
+
+    if (id !== observedPost) {
+      setObservedPost(id);
+      observeElement(document.getElementById(id));
+    }
+  }, [posts]);
+
+  const observeElement = (element: HTMLElement) => {
+    if (!element) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting === true) {
+          console.log("Reached bottom of Post.");
+          setPage(page + 1);
+          observer.unobserve(element);
+        }
+      },
+      {
+        threshold: 1,
+      },
+    );
+    observer.observe(element);
+  };
 
   return (
     <>
@@ -18,9 +64,19 @@ function PageIndex() {
       </Head>
       <div className="container flex pt-5">
         <div className="w-full px-4 md:w-160 md:p-0">
+          {isInitialLoading && (
+            <p className="text-lg text-center">Loading...</p>
+          )}
           {posts?.map((post) => (
-            <PostCard key={post.identifier} post={post} />
+            <PostCard
+              key={post.identifier}
+              post={post}
+              revalidate={revalidate}
+            />
           ))}
+          {isValidating && posts.length > 0 && (
+            <p className="text-lg text-center">Loading More...</p>
+          )}
         </div>
         <div className="hidden ml-6 md:block w-80">
           <div className="bg-white rounded">
