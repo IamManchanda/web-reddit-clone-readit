@@ -10,6 +10,11 @@ import { useState, useEffect } from "react";
 function PageIndex() {
   const [observedPost, setObservedPost] = useState("");
   const { data: topSubs } = useSWR<Sub[]>("/misc/top-subs");
+
+  const title = "Readit: The Front Page of the Internet";
+  const description =
+    "Reddit is a network of communities based on people's interests. Find communities you're interested in, and become part of an online community!";
+
   const { authenticated } = useAuthState();
 
   const {
@@ -62,7 +67,12 @@ function PageIndex() {
   return (
     <>
       <Head>
-        <title>Readit: The Front Page of the Internet</title>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
       </Head>
       <div className="container flex pt-5">
         <div className="w-full px-4 md:w-160 md:p-0">
