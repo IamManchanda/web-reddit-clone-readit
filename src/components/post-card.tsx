@@ -28,6 +28,7 @@ const PostCard: React.FC<PostCardProps> = ({
     commentCount,
     voteScore,
     userVote,
+    sub,
   },
   revalidate,
 }) => {
@@ -93,10 +94,7 @@ const PostCard: React.FC<PostCardProps> = ({
         <div className="flex items-center">
           <Link href={`/r/${subName}`}>
             <a className="flex items-center">
-              <img
-                src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=retro&f=y"
-                className="w-5 h-5 mr-1 rounded-full"
-              />
+              <img src={sub.imageUrl} className="w-5 h-5 mr-1 rounded-full" />
               <span className="text-xs font-bold hover:underline">
                 /r/{subName}
               </span>
