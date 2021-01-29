@@ -80,6 +80,11 @@ function PageSub() {
     <>
       <Head>
         <title>{sub?.title}</title>
+        <meta name="description" content={sub?.title} />
+        <meta property="og:title" content={sub?.title} />
+        <meta property="og:description" content={sub?.title} />
+        <meta property="twitter:title" content={sub?.title} />
+        <meta property="twitter:description" content={sub?.title} />
       </Head>
       {sub && (
         <>
