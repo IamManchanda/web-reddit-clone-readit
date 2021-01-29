@@ -35,6 +35,8 @@ const PostCard: React.FC<PostCardProps> = ({
   const { authenticated } = useAuthState();
   const router = useRouter();
 
+  const isInSubPage = router.pathname === `/r/[sub]`;
+
   const vote = async (value: number) => {
     if (!authenticated) {
       router.push("/login");
@@ -92,16 +94,24 @@ const PostCard: React.FC<PostCardProps> = ({
       </div>
       <div className="w-full p-2">
         <div className="flex items-center">
-          <Link href={`/r/${subName}`}>
-            <a className="flex items-center">
-              <img src={sub.imageUrl} className="w-5 h-5 mr-1 rounded-full" />
-              <span className="text-xs font-bold hover:underline">
-                /r/{subName}
-              </span>
-            </a>
-          </Link>
+          {!isInSubPage && (
+            <>
+              <Link href={`/r/${subName}`}>
+                <a className="flex items-center">
+                  <img
+                    src={sub.imageUrl}
+                    className="w-5 h-5 mr-1 rounded-full"
+                  />
+                  <span className="text-xs font-bold hover:underline">
+                    /r/{subName}
+                  </span>
+                </a>
+              </Link>
+              <span className="mx-1 text-xs text-gray-500">•</span>
+            </>
+          )}
+
           <p className="text-xs text-gray-500">
-            <span className="mx-1">•</span>
             Posted by
             <Link href={`/u/${username}`}>
               <a className="mx-1 hover:underline">/u/{username}</a>
