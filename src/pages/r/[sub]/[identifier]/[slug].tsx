@@ -6,7 +6,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import useSWR from "swr";
 import ActionButton from "../../../../components/action-button";
 import Sidebar from "../../../../components/sidebar";
@@ -17,6 +17,7 @@ dayjs.extend(relativeTime);
 
 function PageSubIdentifierSlug() {
   const [newComment, setNewComment] = useState("");
+  const [description, setDescription] = useState("");
   const { authenticated, user } = useAuthState();
   const router = useRouter();
   const { identifier, sub, slug } = router.query;
@@ -28,6 +29,16 @@ function PageSubIdentifierSlug() {
   if (error) {
     router.push("/");
   }
+
+  useEffect(() => {
+    if (!post) {
+      return;
+    }
+
+    let desc = post.body || post.title;
+    desc = desc.substring(0, 158).concat("...");
+    setDescription(desc);
+  }, []);
 
   const { data: comments, revalidate } = useSWR<Comment[]>(
     identifier && slug ? `/posts/${identifier}/${slug}/comments` : null,
@@ -80,6 +91,11 @@ function PageSubIdentifierSlug() {
     <>
       <Head>
         <title>{post?.title}</title>
+        <meta name="description" content={description} />
+        <meta property="og:title" content={post?.title} />
+        <meta property="og:description" content={description} />
+        <meta property="twitter:title" content={post?.title} />
+        <meta property="twitter:description" content={description} />
       </Head>
       <Link href={`/r/${sub}`}>
         <a>
