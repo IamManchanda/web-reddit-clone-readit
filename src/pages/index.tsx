@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 
 function PageIndex() {
   const [observedPost, setObservedPost] = useState("");
+  const [isRevalidating, setIsRevalidating] = useState(false);
   const { data: topSubs } = useSWR<Sub[]>("/misc/top-subs");
   const { authenticated } = useAuthState();
 
@@ -23,6 +24,13 @@ function PageIndex() {
 
   const posts: Post[] = data ? [].concat(...data) : [];
   const isInitialLoading = !data && !error;
+
+  useEffect(() => {
+    if (isRevalidating) {
+      revalidate();
+      console.log("revalidated on parent");
+    }
+  }, [isRevalidating]);
 
   useEffect(() => {
     if (!posts || posts.length === 0) {
@@ -72,6 +80,7 @@ function PageIndex() {
               key={post.identifier}
               post={post}
               revalidate={revalidate}
+              sendToParentRevalidate={setIsRevalidating}
             />
           ))}
           {isValidating && posts.length > 0 && (

@@ -7,12 +7,14 @@ import classNames from "classnames";
 import ActionButton from "./action-button";
 import { useAuthState } from "../context/auth";
 import { useRouter } from "next/router";
+import { Dispatch, SetStateAction } from "react";
 
 dayjs.extend(relativeTime);
 
 interface PostCardProps {
   post: Post;
-  revalidate?: Function;
+  revalidate?: () => Promise<boolean>;
+  sendToParentRevalidate: Dispatch<SetStateAction<boolean>>;
 }
 
 const PostCard: React.FC<PostCardProps> = ({
@@ -30,6 +32,7 @@ const PostCard: React.FC<PostCardProps> = ({
     userVote,
   },
   revalidate,
+  sendToParentRevalidate,
 }) => {
   const { authenticated } = useAuthState();
   const router = useRouter();
@@ -51,7 +54,8 @@ const PostCard: React.FC<PostCardProps> = ({
       });
 
       if (revalidate) {
-        revalidate();
+        sendToParentRevalidate(true);
+        console.log("revalidated on child");
       }
 
       console.log(res.data);
