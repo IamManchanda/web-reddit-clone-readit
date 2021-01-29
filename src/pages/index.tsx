@@ -19,7 +19,9 @@ function PageIndex() {
     setSize: setPage,
     isValidating,
     revalidate,
-  } = useSWRInfinite<Post[]>((index) => `/posts?page=${index}`);
+  } = useSWRInfinite<Post[]>((index) => `/posts?page=${index}`, {
+    revalidateAll: true,
+  });
 
   const posts: Post[] = data ? [].concat(...data) : [];
   const isInitialLoading = !data && !error;
