@@ -39,7 +39,7 @@ const PostCard: React.FC<PostCardProps> = ({
 
   const vote = async (value: number) => {
     if (!authenticated) {
-      router.push("/login");
+      router.push(`/login/?next=${router.asPath}`);
     }
 
     if (value === userVote) {
