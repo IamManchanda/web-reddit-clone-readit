@@ -1,3 +1,6 @@
+const { APP_DOMAINS } = process.env;
+const appDomains = APP_DOMAINS.split(" ");
+
 module.exports = {
   webpack(config) {
     config.module.rules.push({
@@ -10,6 +13,6 @@ module.exports = {
     return config;
   },
   images: {
-    domains: ["www.gravatar.com", "localhost"],
+    domains: ["www.gravatar.com", ...appDomains],
   },
 };
