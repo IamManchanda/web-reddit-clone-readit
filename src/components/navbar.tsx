@@ -117,7 +117,7 @@ const Navbar: React.FC = () => {
             </button>
           ) : (
             <>
-              <Link href="/login">
+              <Link href={`/login/?next=${router.asPath}`}>
                 <a className="hidden w-20 py-1 mr-4 leading-5 button blue hollow sm:block lg:w-32">
                   Log In
                 </a>
