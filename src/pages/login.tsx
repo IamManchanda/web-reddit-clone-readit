@@ -3,7 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import axios from "axios";
 import InputGroup from "../components/input-group";
-import { useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
 import { useAuthDispatch, useAuthState } from "../context/auth";
 
 function PageLogin() {
@@ -16,8 +16,16 @@ function PageLogin() {
   const dispatch = useAuthDispatch();
   const { authenticated } = useAuthState();
 
+  const routeToDestination = (router: NextRouter) => {
+    if (typeof router.query.next === "string") {
+      router.push(router.query.next);
+    } else {
+      router.push("/");
+    }
+  };
+
   if (authenticated) {
-    router.push("/");
+    routeToDestination(router);
   }
 
   const handleFormSubmit = async (event: FormEvent) => {
@@ -26,17 +34,7 @@ function PageLogin() {
     try {
       const res = await axios.post("/auth/login", { username, password });
       dispatch("LOGIN", res.data);
-      // TODO
-      // router.back();
-      // or,
-      /**
-       * if (typeof router.query.next === "string") {
-       *   router.push(router.query.next);
-       * } else {
-       *   router.push("/");
-       * }
-       */
-      router.push("/");
+      routeToDestination(router);
     } catch (error) {
       setErrors(error.response.data);
     }
