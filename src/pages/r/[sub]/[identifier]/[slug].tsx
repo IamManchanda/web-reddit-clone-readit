@@ -46,7 +46,7 @@ function PageSubIdentifierSlug() {
 
   const vote = async (value: number, comment?: Comment) => {
     if (!authenticated) {
-      router.push("/login");
+      router.push(`/login/?next=${router.asPath}`);
     }
 
     if (
@@ -220,7 +220,7 @@ function PageSubIdentifierSlug() {
                         Log In or Sign Up to leave a comment
                       </p>
                       <div>
-                        <Link href="/login">
+                        <Link href={`/login/?next=${router.asPath}`}>
                           <a className="px-4 py-1 mr-4 hollow blue button">
                             Log In
                           </a>
