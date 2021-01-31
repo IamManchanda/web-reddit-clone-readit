@@ -13,9 +13,9 @@
     "**/yarn-debug.log*": true,
     "**/yarn-error.log*": true,
     "**/.env.local": false,
-    "**/.env.development.local": true,
-    "**/.env.test.local": true,
-    "**/.env.production.local": true,
+    "**/.env.development.local": false,
+    "**/.env.test.local": false,
+    "**/.env.production.local": false,
     "**/.vercel": true
   }
 }
