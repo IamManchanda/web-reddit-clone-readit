@@ -47,7 +47,7 @@ const PostCard: React.FC<PostCardProps> = ({
     }
 
     try {
-      const res = await axios.post("/misc/vote", {
+      await axios.post("/misc/vote", {
         identifier,
         slug,
         value,
@@ -56,8 +56,6 @@ const PostCard: React.FC<PostCardProps> = ({
       if (revalidate) {
         revalidate();
       }
-
-      console.log(res.data);
     } catch (error) {
       console.log({ error });
     }
